@@ -9,11 +9,12 @@ use std::borrow::Borrow;
 
 fn main() {
     // guess_game();
-    // reverse_input();
     // sum_1_to_100();
+    // reverse_input();
     twenty_numbers();
 }
 
+#[allow(dead_code)]
 fn twenty_numbers() {
     loop {
         let inputs = get_inputs();
@@ -88,7 +89,7 @@ fn reverse_input(){
     reverse_second(&inputs);
 }
 
-fn reverse(inputs: &String) {
+fn reverse(inputs: &str) {
     let inputs = String::from(inputs.trim());
     let input_length = inputs.len();
     let mut reverse_inputs: Vec<u8> = vec![];
