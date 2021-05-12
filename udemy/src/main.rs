@@ -1,7 +1,7 @@
 fn main() {
     let a = 2;
     let result = stack_only(a);
-    dbg!(result)
+    println!("{:?}", result)
 }
 
 fn stack_only(b: i32) -> i32 {
