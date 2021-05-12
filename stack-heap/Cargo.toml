@@ -1,5 +1,5 @@
 [package]
-name = "example"
+name = "statck_heap"
 version = "0.1.0"
 authors = ["ndgndg91 <ndgndg91@gmail.com>"]
 edition = "2018"
