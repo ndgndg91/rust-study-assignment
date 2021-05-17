@@ -1,4 +1,5 @@
 use std::net::TcpListener;
+use std::io::Read;
 
 pub struct Server {
     addr: String,
@@ -15,9 +16,10 @@ impl Server {
         let listener = TcpListener::bind(&self.addr).unwrap();
 
         loop {            
-            let (stream, addr) = match listener.accept() {
-                Ok((stream, addr)) => {
-                    (stream, addr)
+            match listener.accept() {
+                Ok((mut stream, _)) => {
+                    let mut buffer = [0; 1024];
+                    stream.read(&mut buffer);
                 },
                 Err(err) => println!("Failed to establish a connection : {}", err)
             };
