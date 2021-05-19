@@ -33,6 +33,8 @@ impl TryFrom<&[u8]> for Request {
 
         let method: Method = method.parse()?;
 
+        
+
         unimplemented!()
     }
 }
