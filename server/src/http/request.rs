@@ -1,3 +1,4 @@
+use std::str::Utf8Error;
 use super::method::Method;
 use std::convert::TryFrom;
 use std::error::Error;
@@ -14,9 +15,6 @@ impl Request {
 
     // GET /path/paht?query=string&query=String HTTP/1.1
     fn from_byte_array(buf: &[u8]) -> Result<Self, String> {
-        let string = String::from("asd");
-        string.encrypt();
-        buf.encrypt();
         unimplemented!();
     }
 }
@@ -26,6 +24,12 @@ pub enum ParseError {
     InvalidEncoding,
     InvalidProtocol,
     InvalidMethodError,
+}
+
+impl From<Utf8Error> for ParseError {
+    fn from(_: Utf8Error) -> Self {
+        Self::InvalidEncoding
+    }
 }
 
 impl ParseError {
@@ -58,23 +62,8 @@ impl Error for ParseError {
 impl TryFrom<&[u8]> for Request {
     type Error = ParseError;
 
-    fn try_from(value: &[u8]) -> Result<Self, Self::Error> {
+    fn try_from(buf: &[u8]) -> Result<Self, Self::Error> {
+        let request = std::str::from_utf8(buf)?;
         unimplemented!()
-    }
-}
-
-trait Encrypt {
-    fn encrypt(&self) -> Self;
-}
-
-impl Encrypt for String {
-    fn encrypt(&self) -> Self {
-        unimplemented!()
-    }
-}
-
-impl Encrypt for &[u8] {
-    fn encrypt(&self) -> Self {
-        unimplemented!();
     }
 }
