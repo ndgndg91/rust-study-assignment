@@ -11,12 +11,30 @@ pub struct Request {
     method: Method,
 }
 
-impl Request {
-
-    // GET /path/paht?query=string&query=String HTTP/1.1
+impl Request {    
     fn from_byte_array(buf: &[u8]) -> Result<Self, String> {
         unimplemented!();
     }
+}
+
+impl TryFrom<&[u8]> for Request {
+    type Error = ParseError;
+
+    // GET /path/paht?query=string&query=String HTTP/1.1
+    fn try_from(buf: &[u8]) -> Result<Self, Self::Error> {
+        let request = std::str::from_utf8(buf)?;
+        unimplemented!()
+    }
+}
+
+fn get_next_word(request: &str) -> Option<(&str, &str)> {
+    for (i, c) in request.chars().enumerate() {
+        if c == ' ' {
+            return Some((&request[..i], &request[i + 1..]));
+        }
+    }
+
+    None
 }
 
 pub enum ParseError {
@@ -57,13 +75,4 @@ impl Debug for ParseError {
 
 impl Error for ParseError {
 
-}
-
-impl TryFrom<&[u8]> for Request {
-    type Error = ParseError;
-
-    fn try_from(buf: &[u8]) -> Result<Self, Self::Error> {
-        let request = std::str::from_utf8(buf)?;
-        unimplemented!()
-    }
 }
