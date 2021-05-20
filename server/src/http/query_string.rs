@@ -2,10 +2,12 @@ use std::collections::HashMap;
 
 // a=1&b=2&c&d=&e===&fd&d=abc
 
+#[derive(Debug)]
 pub struct QueryString<'buf> {
     pub data: HashMap<&'buf str, Value<'buf>>
 }
 
+#[derive(Debug)]
 pub enum Value<'buf> {
     Single(&'buf str),
     Multiple(Vec<&'buf str>),
