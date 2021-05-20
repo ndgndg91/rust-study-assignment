@@ -29,7 +29,7 @@ impl Server {
 
                             match Request::try_from(&buffer[..]) {
                                 Ok(request) => {
-                                    println!("{:?}", request);
+                                    println!("request print 해야되");
                                 },
                                 Err(e) => println!("Failed to parse {}", e)
                             }
