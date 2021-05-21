@@ -36,16 +36,20 @@ impl Server {
                             println!();
                             println!("{}", String::from_utf8_lossy(&buffer));
 
-                            match Request::try_from(&buffer[..]) {
+                            let response = match Request::try_from(&buffer[..]) {
                                 Ok(request) => {
                                     println!("{:?}", request);
-                                    handler.handle_request(&request);
+                                    handler.handle_request(&request)
                                 },
                                 Err(e) => {
                                     println!("Failed to parse {}", e);
-                                    handler.handle_bad_request(&e);
+                                    handler.handle_bad_request(&e)
                                 }
                             };
+
+                            if let Err(e) = response.send(&mut stream) {
+                                println!("Failed to response {}", e);
+                            }
                         
                         },
                         Err(e) => println!("Failed to read from connection : {}", e)

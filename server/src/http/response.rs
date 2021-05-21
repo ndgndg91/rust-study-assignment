@@ -1,6 +1,5 @@
 use super::status_code::StatusCode;
 use std::fmt::{Display, Formatter, Result as FmtResult};
-use std::net::TcpStream;
 use std::io::{Write, Result as IoResult};
 
 pub struct Response {
@@ -13,7 +12,7 @@ impl Response {
         Response { status_code, body }
     }
 
-    pub fn send(&self, stream: &mut TcpStream) -> IoResult<()> {
+    pub fn send(&self, stream: &mut impl Write) -> IoResult<()> {
         let body = match &self.body {
             Some(b) => b,
             None => "",
