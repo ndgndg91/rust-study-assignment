@@ -1,4 +1,4 @@
-pub enum StatusCode {}
+use super::status_code::StatusCode;
 
 pub struct Response {
     status_code: StatusCode,
