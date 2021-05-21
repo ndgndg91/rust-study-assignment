@@ -13,7 +13,7 @@ impl Response {
         Response { status_code, body }
     }
 
-    pub fn send(&self, stream: &mut impl Write) -> IoResult<()> {
+    pub fn send(&self, stream: &mut TcpStream) -> IoResult<()> {
         let body = match &self.body {
             Some(b) => b,
             None => "",
