@@ -52,37 +52,5 @@ impl Server {
                 println!("Failed to response {}", e);
             }
         }
-
-        // loop {
-        //     match listener.accept() {
-        //         Ok((mut stream, _)) => {
-        //             let mut buffer = [0; 1024];
-        //             match stream.read(&mut buffer) {
-        //                 Ok(_) => {
-        //                     println!("Received a request!");
-        //                     println!();
-        //                     println!("{}", String::from_utf8_lossy(&buffer));
-
-        //                     let response = match Request::try_from(&buffer[..]) {
-        //                         Ok(request) => {
-        //                             println!("{:?}", request);
-        //                             handler.handle_request(&request)
-        //                         },
-        //                         Err(e) => {
-        //                             println!("Failed to parse {}", e);
-        //                             handler.handle_bad_request(&e)
-        //                         }
-        //                     };
-
-        //                     if let Err(e) = response.send(&mut stream) {
-        //                         println!("Failed to response {}", e);
-        //                     }
-        //                 },
-        //                 Err(e) => println!("Failed to read from connection : {}", e)
-        //             };
-        //         },
-        //         Err(e) => println!("Failed to establish a connection : {}", e)
-        //     };
-        // }
     }
 }
