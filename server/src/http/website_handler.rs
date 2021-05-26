@@ -28,7 +28,7 @@ impl WebSiteHandler {
                 if path.starts_with(&self.public_path) {
                     fs::read_to_string(path).ok()
                 } else {
-                    println!("Directory Traversal ATtack Atemmpted: {}", file_path);
+                    println!("Directory Traversal Attack Attempted: {}", file_path);
                     None
                 }
             },
