@@ -1,16 +1,10 @@
-use std::net::TcpListener;
-use std::io::Read;
-use crate::http::{Request, Response, StatusCode, ParseError};
+use crate::http::{ParseError, Request, Response, StatusCode};
 use std::convert::TryFrom;
-
-pub trait Handler {
-    fn handle_request(&mut self, request: &Request) -> Response;
-
-    fn handle_bad_request(&mut self, e: &ParseError) -> Response {
-        println!("Failed to parse request : {}", e);
-        Response::new(StatusCode::BadRequest, None)
-    }
-}
+use std::io::Read;
+use std::net::{TcpListener, TcpStream};
+use std::thread;
+use std::env;
+use crate::http::website_handler::{WebSiteHandler, Handler};
 
 pub struct Server {
     addr: String,
@@ -18,45 +12,77 @@ pub struct Server {
 
 impl Server {
     pub fn new(addr: String) -> Self {
-        Self { addr: addr }
+        Self { addr }
     }
 
-    pub fn run(self, mut handler: impl Handler) {
+    pub fn run(self) {
         println!("Listening on {}", self.addr);
-
         let listener = TcpListener::bind(&self.addr).unwrap();
- 
-        loop {            
-            match listener.accept() {
-                Ok((mut stream, _)) => {
-                    let mut buffer = [0; 1024];
-                    match stream.read(&mut buffer) {
-                        Ok(_) => {
-                            println!("Received a request!");
-                            println!();
-                            println!("{}", String::from_utf8_lossy(&buffer));
 
-                            let response = match Request::try_from(&buffer[..]) {
-                                Ok(request) => {
-                                    println!("{:?}", request);
-                                    handler.handle_request(&request)
-                                },
-                                Err(e) => {
-                                    println!("Failed to parse {}", e);
-                                    handler.handle_bad_request(&e)
-                                }
-                            };
+        for stream in listener.incoming() {
+            println!("Received a request!");
+            let stream = stream.unwrap();
 
-                            if let Err(e) = response.send(&mut stream) {
-                                println!("Failed to response {}", e);
-                            }
-                        
-                        },
-                        Err(e) => println!("Failed to read from connection : {}", e)
-                    };
-                },
-                Err(e) => println!("Failed to establish a connection : {}", e)
-            };
+            thread::spawn(|| {
+                let default_path = format!("{}/public", env!("CARGO_MANIFEST_DIR"));
+                let public_path = env::var("PUBLIC_PATH").unwrap_or(default_path);
+                println!("public path : {}", public_path);
+                handle_connection(stream, WebSiteHandler::new(public_path));
+            });
         }
+
+        fn handle_connection(mut stream: TcpStream, mut handler: impl Handler) {
+            let mut buffer = [0; 1024];
+            stream.read(&mut buffer).unwrap();
+            println!();
+            println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+            let parse_result = Request::try_from(&buffer[..]);
+            let response;
+            if parse_result.is_ok() {
+                let request = parse_result.unwrap();
+                println!("{:?}", request);
+                response = handler.handle_request(&request);
+            } else {
+                let err = parse_result.unwrap_err();
+                print!("Failed to parse {}", err);
+                response = handler.handle_bad_request(&err)
+            }
+
+            if let Err(e) = response.send(&mut stream) {
+                println!("Failed to response {}", e);
+            }
+        }
+
+        // loop {
+        //     match listener.accept() {
+        //         Ok((mut stream, _)) => {
+        //             let mut buffer = [0; 1024];
+        //             match stream.read(&mut buffer) {
+        //                 Ok(_) => {
+        //                     println!("Received a request!");
+        //                     println!();
+        //                     println!("{}", String::from_utf8_lossy(&buffer));
+
+        //                     let response = match Request::try_from(&buffer[..]) {
+        //                         Ok(request) => {
+        //                             println!("{:?}", request);
+        //                             handler.handle_request(&request)
+        //                         },
+        //                         Err(e) => {
+        //                             println!("Failed to parse {}", e);
+        //                             handler.handle_bad_request(&e)
+        //                         }
+        //                     };
+
+        //                     if let Err(e) = response.send(&mut stream) {
+        //                         println!("Failed to response {}", e);
+        //                     }
+        //                 },
+        //                 Err(e) => println!("Failed to read from connection : {}", e)
+        //             };
+        //         },
+        //         Err(e) => println!("Failed to establish a connection : {}", e)
+        //     };
+        // }
     }
 }
