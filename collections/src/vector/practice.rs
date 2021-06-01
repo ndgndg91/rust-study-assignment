@@ -1,31 +1,32 @@
-use std::fmt::Display;
+use std::result::Result;
 
-pub struct VectorWrapper {
-    vec: Vec<i32>,
+#[derive(Debug)]
+pub struct VectorWrapper<T> {
+    vec: Vec<T>,
 }
 
-impl VectorWrapper {
+#[derive(Debug)]
+pub enum VectorError {
+    IndexOutOfBoundsError,
+}
+
+impl<T> VectorWrapper<T> {
     pub fn new() -> Self {
-        let mut vector = vec![];
-        Self { vec: vector }
+        Self { vec: vec![] }
     }
 
-    pub fn push(&mut self, value: i32) {
+    pub fn push(&mut self, value: T) {
         self.vec.push(value);
     }
-}
 
-impl Display for VectorWrapper {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::result::Result<(), std::fmt::Error> {
-        let mut display = String::new();
-        for value in &self.vec {
-            let string_value = value.to_string();
-            display.push_str(&string_value);
-            display.push(',');
+    pub fn get(self, index: usize) -> Result<T, VectorError>
+    where
+        T: Copy,
+    {
+        if self.vec.len() <= index {
+            return Err(VectorError::IndexOutOfBoundsError);
         }
 
-        display.remove(display.len() - 1);
-        write!(f, "{}", display)
-
+        Ok(self.vec[index])
     }
 }
