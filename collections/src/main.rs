@@ -1,10 +1,29 @@
 mod vector;
+mod string;
 use vector::practice::VectorWrapper;
+use string::practice::{new_string, new_to_string, from_new_string, concant_new_string};
 
 fn main() {
-    vector_practice();
+    // vector_practice();
+    string_practice();
 }
 
+fn string_practice() {
+    let nam_dong_gil = new_string("남동길");
+    println!("{}", nam_dong_gil);
+    let ndgndg91 = new_to_string("ndgndg91");
+    println!("{}", ndgndg91);
+    let giri = from_new_string("giri");
+    println!("{}", giri);
+    let hello_world = concant_new_string("hello", " world!");
+    println!("{}", hello_world);
+
+    let giri = concant_new_string(&giri, " ");
+    let hello_world = concant_new_string(&giri, &hello_world);
+    println!("{}", hello_world);
+}
+
+#[allow(dead_code)]
 fn vector_practice() {
     let mut wrapper = VectorWrapper::new();
     wrapper.push(0);
