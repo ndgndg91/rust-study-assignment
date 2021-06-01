@@ -19,6 +19,7 @@ fn vector_practice() {
     let mut string_wrapper = VectorWrapper::new();
     string_wrapper.push(String::from("ndgndg91"));
     string_wrapper.push("giri".to_owned());
+    string_wrapper.push("nam-dong-gil".to_string());
 
     println!("{:?}", string_wrapper);
 }
