@@ -21,3 +21,7 @@ pub fn concant_new_string<'a, 'b>(str1: &'a str, str2: &'b str) -> String {
 pub fn easy_concat<'a, 'b>(str1: &'a str, str2: &'b str) -> String {
     String::from(str1) + str2
 }
+
+pub fn concant_three<'a>(str1: &'a str, str2: &'a str, str3: &'a str) -> String {
+    format!("{}{}{}", str1, str2, str3)
+}
