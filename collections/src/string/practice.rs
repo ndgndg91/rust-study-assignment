@@ -17,3 +17,7 @@ pub fn concant_new_string<'a, 'b>(str1: &'a str, str2: &'b str) -> String {
     str.push_str(str2);
     return str;
 }
+
+pub fn easy_concat<'a, 'b>(str1: &'a str, str2: &'b str) -> String {
+    String::from(str1) + str2
+}

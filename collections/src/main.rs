@@ -1,7 +1,7 @@
 mod vector;
 mod string;
 use vector::practice::VectorWrapper;
-use string::practice::{new_string, new_to_string, from_new_string, concant_new_string};
+use string::practice::{new_string, new_to_string, from_new_string, concant_new_string, easy_concat};
 
 fn main() {
     // vector_practice();
@@ -20,6 +20,10 @@ fn string_practice() {
 
     let giri = concant_new_string(&giri, " ");
     let hello_world = concant_new_string(&giri, &hello_world);
+    println!("{}", hello_world);
+
+    let nam_dong_gil = easy_concat(&nam_dong_gil, " ");
+    let hello_world = easy_concat(&nam_dong_gil, &hello_world);
     println!("{}", hello_world);
 }
 
