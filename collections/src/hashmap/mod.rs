@@ -3,6 +3,8 @@ use std::collections::HashMap;
 pub fn hashmap_practice() {
     new();
     new_iter();
+    access_hashmap();
+    update_hashmap();
 }
 
 fn new() {
@@ -29,4 +31,24 @@ fn new_iter() {
     let scores = vec![50, 70];
     let team_scores = temas.into_iter().zip(scores.into_iter()).collect::<HashMap<String, i32>>();
     println!("{:?}", team_scores);
+}
+
+fn access_hashmap() {
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    for (key, value) in &scores {
+        println!("{}: {}", key, value);
+    }
+}
+
+fn update_hashmap() {
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Blue"), 25);
+
+    println!("{:?}", scores);
 }
