@@ -91,8 +91,8 @@ impl Server {
         fn handle_connection(mut stream: TcpStream, mut handler: impl Handler) {
             let mut buffer = [0; 1024];
             stream.read(&mut buffer).unwrap();
-            println!();
-            println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+            // println!();
+            // println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
             let parse_result = Request::try_from(&buffer[..]);
             let response;
             if parse_result.is_ok() {
